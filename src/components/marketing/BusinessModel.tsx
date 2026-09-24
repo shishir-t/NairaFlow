@@ -1,17 +1,17 @@
 import { SectionHeading } from "@/components/marketing/Problem";
 
 const revenue = [
-  { pct: "55%", name: "FX Spread", desc: "1–2% margin on every international transfer. ~$26B annual Nigeria remittance flow." },
+  { pct: "55%", name: "FX Spread", desc: "1–2% margin on every international transfer. ~₦41.6T annual Nigeria remittance flow." },
   { pct: "20%", name: "Agent Commissions", desc: "0.5% of cash-in/out volume via agent network. Agents share the fee; NairaFlow keeps a cut." },
   { pct: "15%", name: "Transaction Fees", desc: "Flat ₦50 per P2P transfer above ₦5,000. Institutional/merchant tier = 0.3% per transaction." },
   { pct: "10%", name: "Value-Added Services", desc: "Micro-loans (via partner), insurance products, and premium “NairaFlow Pro” subscription." },
 ];
 
 const unitEconomics = [
-  { label: "CAC (agent-led)", value: "~$4" },
-  { label: "CAC (digital)", value: "~$1.20" },
-  { label: "Avg. monthly txn vol.", value: "$180 / user" },
-  { label: "LTV (3-yr)", value: "$48" },
+  { label: "CAC (agent-led)", value: "~₦6,400" },
+  { label: "CAC (digital)", value: "~₦1,920" },
+  { label: "Avg. monthly txn vol.", value: "₦288,000 / user" },
+  { label: "LTV (3-yr)", value: "₦76,800" },
   { label: "LTV : CAC", value: "12×" },
   { label: "Breakeven (unit)", value: "Month 3" },
 ];

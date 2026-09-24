@@ -1,7 +1,7 @@
 import { SectionHeading } from "@/components/marketing/Problem";
 
 const africaStats = [
-  { value: "$65B", label: "Africa fintech market by 2030 (McKinsey)" },
+  { value: "₦104T", label: "Africa fintech market by 2030 (McKinsey)" },
   { value: "40%", label: "Projected CAGR of Africa mobile payments" },
   { value: "1.4B", label: "Africa population by 2030 — 60% under 25" },
   { value: "800M", label: "Mobile subscribers in Africa by 2027 (GSMA)" },
@@ -9,9 +9,9 @@ const africaStats = [
 
 const nigeriaStats = [
   { value: "220M people", label: "Largest population in Africa; #1 economy by PPP" },
-  { value: "$26B remittances", label: "Sent home annually — 4th largest globally" },
+  { value: "₦41.6T remittances", label: "Sent home annually — 4th largest globally" },
   { value: "53% smartphone penetration", label: "Up from 25% in 2017; growing 8% YoY" },
-  { value: "OPay, PalmPay", label: "Proof of product-market fit — OPay hit $2B valuation" },
+  { value: "OPay, PalmPay", label: "Proof of product-market fit — OPay hit ₦3.2T valuation" },
 ];
 
 export function Opportunity() {

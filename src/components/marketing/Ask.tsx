@@ -2,18 +2,18 @@ import Link from "next/link";
 import { SectionHeading } from "@/components/marketing/Problem";
 
 const uses = [
-  { pct: "40%", value: "$1.4M", label: "Product & Engineering — full-stack team of 12" },
-  { pct: "25%", value: "$875K", label: "Regulatory & Compliance — CBN PSB, FCA, FinCEN" },
-  { pct: "20%", value: "$700K", label: "Agent Network — 500 agents in Lagos & Abuja" },
-  { pct: "15%", value: "$525K", label: "Marketing & Growth — user acquisition, diaspora" },
+  { pct: "40%", value: "₦2.24B", label: "Product & Engineering — full-stack team of 12" },
+  { pct: "25%", value: "₦1.4B", label: "Regulatory & Compliance — CBN PSB, FCA, FinCEN" },
+  { pct: "20%", value: "₦1.12B", label: "Agent Network — 500 agents in Lagos & Abuja" },
+  { pct: "15%", value: "₦840M", label: "Marketing & Growth — user acquisition, diaspora" },
 ];
 
 export function Ask() {
   return (
     <section id="ask" className="border-b border-nf-border bg-nf-surface/30">
       <div className="mx-auto max-w-6xl px-6 py-20">
-        <SectionHeading eyebrow="The Ask" title="$3.5M Seed Round" />
-        <p className="mt-2 text-sm text-neutral-400">Pre-money valuation: $14M  •  18-month runway</p>
+        <SectionHeading eyebrow="The Ask" title="₦5.6B Seed Round" />
+        <p className="mt-2 text-sm text-neutral-400">Pre-money valuation: ₦22.4B  •  18-month runway</p>
 
         <h3 className="mt-12 text-lg font-semibold text-white">Use of Funds</h3>
         <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">

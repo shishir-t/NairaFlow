@@ -14,7 +14,7 @@ const pillars = [
   },
   {
     title: "Community Wi-Fi via agent nodes",
-    body: "NairaFlow agents become community Wi-Fi hotspot hosts — solar-powered routers co-funded with state governments and piggybacking on MTN and Airtel rural 4G rollouts (each investing $1B+ in rural Nigeria). Users earn free internet per transaction.",
+    body: "NairaFlow agents become community Wi-Fi hotspot hosts — solar-powered routers co-funded with state governments and piggybacking on MTN and Airtel rural 4G rollouts (each investing ₦1.6T+ in rural Nigeria). Users earn free internet per transaction.",
     footer: "Agents earn extra income; NairaFlow gains an activation channel",
   },
   {

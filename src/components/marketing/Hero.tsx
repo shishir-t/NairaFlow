@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 const stats = [
-  { value: "$700B+", label: "Nigeria informal GDP" },
+  { value: "₦1,120T+", label: "Nigeria informal GDP" },
   { value: "40M+", label: "Unbanked Nigerians" },
-  { value: "$26B", label: "Annual diaspora remittances" },
+  { value: "₦41.6T", label: "Annual diaspora remittances" },
 ];
 
 export function Hero() {

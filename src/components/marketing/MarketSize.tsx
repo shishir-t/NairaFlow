@@ -1,16 +1,16 @@
 import { SectionHeading } from "@/components/marketing/Problem";
 
 const tiers = [
-  { label: "TAM", value: "$180B", desc: "Total Africa mobile money + remittance market" },
-  { label: "SAM", value: "$42B", desc: "Nigeria fintech addressable market (2025E)" },
-  { label: "SOM", value: "$1.2B", desc: "Year-5 serviceable target (3% Nigeria market)" },
+  { label: "TAM", value: "₦288T", desc: "Total Africa mobile money + remittance market" },
+  { label: "SAM", value: "₦67.2T", desc: "Nigeria fintech addressable market (2025E)" },
+  { label: "SOM", value: "₦1.92T", desc: "Year-5 serviceable target (3% Nigeria market)" },
 ];
 
 export function MarketSize() {
   return (
     <section className="border-b border-nf-border">
       <div className="mx-auto max-w-6xl px-6 py-20">
-        <SectionHeading eyebrow="Market Size" title="A multi-billion dollar addressable market at every layer" />
+        <SectionHeading eyebrow="Market Size" title="A multi-trillion naira addressable market at every layer" />
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-3">
           {tiers.map((t, i) => (
             <div
