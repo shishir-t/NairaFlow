@@ -6,6 +6,19 @@ jurisdiction it touches. None of this can be done by writing code — it require
 counsel and the actual regulators. Treat this file as the starting punch list referenced in the
 investor deck (`CBN PSB`, `FCA`, `FinCEN`).
 
+## Compliance Officer
+
+**Shishir Tumukuntala** (founder) is designated as NairaFlow's interim, part-time Compliance
+Officer, effective immediately, until the company makes a dedicated compliance hire. *(Name
+inferred from the account on file — correct this directly in the file if it's wrong.)*
+
+Responsibilities at this stage: owns `docs/kyc-onboarding.md` and `docs/transaction-monitoring.md`,
+is the designated point of contact for CBN/NFIU, FCA/NCA, and FinCEN once those registrations
+exist, and signs off before any new corridor or product feature that touches real money ships.
+This is a named-individual accountability requirement under CBN AML/CFT rules and FinCEN's BSA/AML
+program requirement for MSBs (both referenced below) — it is not satisfiable by "the team" or by an
+unnamed role.
+
 ## Nigeria — Central Bank of Nigeria (CBN)
 
 - [ ] Engage Nigerian fintech/payments counsel before any real money moves through the app.
@@ -18,12 +31,15 @@ investor deck (`CBN PSB`, `FCA`, `FinCEN`).
     multi-month to multi-quarter process, not a sprint item).
 - [ ] Register with the CBN's National Financial Inclusion Strategy program referenced in the
       deck's "Government & Connectivity" section, if pursuing the state-government MoU angle.
-- [ ] AML/CFT program: appointed compliance officer, transaction monitoring thresholds, and
-      Suspicious Transaction Report (STR) filing process with the NFIU, all required before
-      go-live — not optional add-ons.
+- [x] AML/CFT program: appointed compliance officer (above), written KYC onboarding procedure
+      (`docs/kyc-onboarding.md`), and written transaction monitoring procedure
+      (`docs/transaction-monitoring.md`) are now drafted. **Not yet done:** the procedures
+      themselves aren't implemented in code (no real NIN verification, no live monitoring job — see
+      each doc's own gap list), and neither doc has been reviewed by counsel or filed with
+      regulators. Drafting the procedure is not the same as running it.
 - [ ] NIN verification must go through NIMC's actual verification API (the app currently accepts
       any 11-digit string as a NIN — see `src/lib/actions/auth.ts` — this is a demo shortcut, not a
-      real KYC check).
+      real KYC check). Tracked in `docs/kyc-onboarding.md`.
 
 ## United Kingdom — FCA
 
@@ -38,8 +54,10 @@ investor deck (`CBN PSB`, `FCA`, `FinCEN`).
 - [ ] Register as a **Money Services Business (MSB)** with FinCEN for the US remittance corridor.
 - [ ] State-by-state money transmitter licensing is separate from the federal FinCEN registration
       and is typically the longer pole — each state NairaRemit operates in needs its own license.
-- [ ] BSA/AML program: SAR filing, recordkeeping, and a designated compliance officer, per FinCEN
-      requirements for MSBs.
+- [x] Designated compliance officer named (above) — required by FinCEN for MSBs.
+- [ ] BSA/AML program: SAR filing and recordkeeping process, per FinCEN requirements for MSBs
+      (draft transaction monitoring / SAR escalation path in `docs/transaction-monitoring.md`, not
+      yet reviewed by US counsel or operational).
 
 ## Cross-cutting
 
