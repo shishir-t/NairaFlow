@@ -86,6 +86,9 @@ export async function sendRemitAction(_prev: FormState, formData: FormData): Pro
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/remit");
 
+  // TODO(notifications): wire to email/SMS provider here — alert the
+  // recipient (or prompt them to sign up) once a real provider is
+  // integrated.
   return recipient
     ? { success: `₦${netNgn.toLocaleString()} delivered to ${recipient.fullName} at a locked rate of ${lockedRate}` }
     : {

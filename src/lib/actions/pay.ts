@@ -80,5 +80,8 @@ export async function sendPayAction(_prev: FormState, formData: FormData): Promi
   writeDb(db);
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/pay");
+  // TODO(notifications): wire to email/SMS provider here — notify both the
+  // sender and recipient of the completed transfer once a real provider is
+  // integrated.
   return { success: `₦${amount.toLocaleString()} sent to ${recipient.fullName}` };
 }
