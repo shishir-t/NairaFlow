@@ -3,8 +3,9 @@
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { readDb, writeDb, genId } from "@/lib/db";
-import { getSessionUserId } from "@/lib/auth";
+import { getSessionUserId, getCurrentUser } from "@/lib/auth";
 import { isDuplicateTransaction } from "@/lib/replay-guard";
+import { initializeTransaction } from "@/lib/paystack";
 import type { FormState } from "@/lib/actions/state";
 
 const fundSchema = z.object({
@@ -35,6 +36,38 @@ export async function fundWalletAction(_prev: FormState, formData: FormData): Pr
 
   if (isDuplicateTransaction(db, userId, "fund", amount)) {
     return { error: "Duplicate request detected. Please wait a moment before trying again." };
+  }
+
+  if (method === "bank_transfer") {
+    // Real money path: hand off to Paystack instead of crediting directly.
+    // The wallet is only credited once the `charge.success` webhook fires
+    // (see src/app/api/paystack/webhook/route.ts) and verifies the payment.
+    const user = await getCurrentUser();
+    if (!user) return { error: "You must be signed in" };
+
+    const reference = genId("ps");
+    const result = await initializeTransaction({
+      email: user.email,
+      amountNgn: amount,
+      reference,
+    });
+    if ("error" in result) return { error: result.error };
+
+    db.transactions.unshift({
+      id: genId("txn"),
+      userId,
+      type: "fund",
+      amountNgn: amount,
+      method: methodLabels[method],
+      status: "pending",
+      createdAt: new Date().toISOString(),
+      paystackReference: result.reference,
+    });
+    writeDb(db);
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/wallet");
+
+    return { redirectUrl: result.authorizationUrl };
   }
 
   wallet.balanceNgn += amount;

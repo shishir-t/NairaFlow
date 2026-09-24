@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { fundWalletAction } from "@/lib/actions/wallet";
 import { FormError, FormSuccess, useNfForm } from "@/components/ui/AuthForm";
 import { SubmitButton } from "@/components/ui/SubmitButton";
@@ -15,6 +15,14 @@ const methods = [
 export function FundWalletForm() {
   const [state, formAction] = useNfForm(fundWalletAction);
   const [method, setMethod] = useState("bank_transfer");
+
+  // Bank transfer funding hands off to Paystack's hosted checkout — when the
+  // action reports a redirectUrl, send the browser there.
+  useEffect(() => {
+    if (state?.redirectUrl) {
+      window.location.href = state.redirectUrl;
+    }
+  }, [state?.redirectUrl]);
 
   return (
     <form action={formAction} className="rounded-xl border border-nf-border bg-nf-surface/50 p-5">

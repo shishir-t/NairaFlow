@@ -26,6 +26,46 @@ Open [http://localhost:3000](http://localhost:3000). Data persists locally in `.
 
 Set `NF_SESSION_SECRET` in production to a long random string (defaults to a dev-only secret).
 
+### Paystack (bank transfer wallet funding)
+
+`fundWalletAction`'s **Bank Transfer** method (`src/lib/actions/wallet.ts`) is wired to Paystack's
+standard Transaction Initialize / Verify REST API (plain `fetch`, no SDK) instead of simulating a
+credit. `ussd` and `cash_agent` remain simulated, unchanged.
+
+Set these two environment variables to enable it locally (`.env.local`, gitignored):
+
+```bash
+PAYSTACK_SECRET_KEY=<your Paystack TEST secret key>
+PAYSTACK_PUBLIC_KEY=<your Paystack TEST public key>
+```
+
+Get these from the [Paystack dashboard](https://dashboard.paystack.com) → Settings → API Keys &
+Webhooks — copy the **Test Secret Key** and **Test Public Key** shown there (Paystack prefixes them
+so they're easy to tell apart from live keys). **Use test mode keys for all development and demo
+purposes.** Neither key is required to build, typecheck, lint, or run the app — if
+`PAYSTACK_SECRET_KEY` is unset, `initializeTransaction`/`verifyTransaction` return a clear error
+instead of throwing, and bank transfer funding surfaces that error in the UI while `ussd` /
+`cash_agent` keep working as before.
+
+**Webhook setup:** Paystack confirms payment asynchronously by POSTing to a webhook once the
+transfer completes, rather than on the redirect back to the app. In the Paystack dashboard, set the
+webhook URL to:
+
+```
+https://<your-domain>/api/paystack/webhook
+```
+
+(`src/app/api/paystack/webhook/route.ts`). It verifies the `x-paystack-signature` header
+(HMAC-SHA512 of the raw body, keyed with `PAYSTACK_SECRET_KEY`) before trusting the payload, then on
+a verified `charge.success` event looks up the matching pending transaction (by the Paystack
+reference stored on it when `fundWalletAction` called `initializeTransaction`) and credits the
+wallet — only once Paystack confirms the payment, not on the initial redirect.
+
+**Going live is not just an env var flip.** Switching `PAYSTACK_SECRET_KEY` / `PAYSTACK_PUBLIC_KEY`
+to live keys (`sk_live_...` / `pk_live_...`) means real money moves through the app, which requires
+everything in `COMPLIANCE.md` to be sorted first (CBN licensing, AML/CFT program, real NIN
+verification, etc.) — none of that is optional and none of it is done by writing code.
+
 ### Admin / Ops view
 
 `/dashboard/admin` shows aggregate stats (total wallet balance, transaction volume by type, agent

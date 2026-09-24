@@ -40,6 +40,9 @@ export type Transaction = {
   feeNgn?: number;
   status: TransactionStatus;
   createdAt: string;
+  /** Paystack transaction reference, set for bank-transfer funding attempts
+   * initiated via Paystack so the webhook can look the pending record up. */
+  paystackReference?: string;
 };
 
 export type Agent = {
