@@ -35,6 +35,28 @@ is safe to expose in a real deployment, it needs proper role-based access contro
 role field on `User`, and a server-side check in the route — or its own layout — that redirects
 non-admins away) rather than piggybacking on ordinary dashboard auth.
 
+## Deploying
+
+The app is a stock Next.js 16 App Router project, so it deploys to Vercel with zero extra config:
+
+1. Push this branch, then in Vercel: **Add New → Project → Import** `shishir-t/NairaFlow`, pick this
+   branch, and deploy — no `vercel.json` needed.
+2. Set environment variables in the Vercel project settings (Production + Preview):
+   - `NF_SESSION_SECRET` — required. Generate with `openssl rand -base64 32`. Never reuse the dev
+     default (`nairaflow-dev-secret-change-me`).
+   - `DATABASE_URL` — required once the JSON-file store is replaced with Postgres (see "Before
+     production" below). Any standard Postgres connection string works (Vercel Postgres, Supabase,
+     Neon, etc.) — the app itself is host-agnostic.
+   - `PAYSTACK_SECRET_KEY` / `PAYSTACK_PUBLIC_KEY` — required once real wallet funding replaces the
+     simulated `fundWalletAction` flow. Use Paystack's **test** keys until the money flows are
+     verified end-to-end.
+3. Because `.data/db.json` is a local file, it will NOT persist on Vercel's serverless filesystem —
+   deploying before the Postgres migration below means every write is lost between invocations.
+   Do the database migration first, or expect data loss on Vercel.
+
+No deployment has been done from this session — actually running the above steps requires access to
+your Vercel account, which this session doesn't have.
+
 ## Project structure
 
 - `src/app` — routes: marketing landing page, `/signup`, `/login`, and the `/dashboard/*` app
