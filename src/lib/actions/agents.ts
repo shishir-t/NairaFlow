@@ -65,6 +65,8 @@ export async function agentCashAction(_prev: FormState, formData: FormData): Pro
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/agents");
 
+  // TODO(notifications): wire to email/SMS provider here — send a
+  // cash-in/cash-out receipt once a real provider is integrated.
   return {
     success:
       direction === "cash_out"

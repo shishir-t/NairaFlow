@@ -26,6 +26,15 @@ Open [http://localhost:3000](http://localhost:3000). Data persists locally in `.
 
 Set `NF_SESSION_SECRET` in production to a long random string (defaults to a dev-only secret).
 
+### Admin / Ops view
+
+`/dashboard/admin` shows aggregate stats (total wallet balance, transaction volume by type, agent
+cash-in/cash-out) pulled straight from `readDb()`. It is currently protected only by the same
+session check as every other `/dashboard/*` route — **any signed-in user can view it**. Before this
+is safe to expose in a real deployment, it needs proper role-based access control (an `isAdmin` /
+role field on `User`, and a server-side check in the route — or its own layout — that redirects
+non-admins away) rather than piggybacking on ordinary dashboard auth.
+
 ## Project structure
 
 - `src/app` — routes: marketing landing page, `/signup`, `/login`, and the `/dashboard/*` app

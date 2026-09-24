@@ -50,5 +50,7 @@ export async function fundWalletAction(_prev: FormState, formData: FormData): Pr
   writeDb(db);
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/wallet");
+  // TODO(notifications): wire to email/SMS provider here — send a funding
+  // confirmation to the user once a real provider is integrated.
   return { success: `₦${amount.toLocaleString()} added via ${methodLabels[method]}` };
 }
