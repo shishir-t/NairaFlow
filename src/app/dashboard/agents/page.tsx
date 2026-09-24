@@ -4,7 +4,7 @@ import { PageHeader } from "@/components/dashboard/PageHeader";
 import { AgentList } from "@/components/dashboard/AgentList";
 
 export default async function AgentsPage() {
-  const db = readDb();
+  const db = await readDb();
   const user = await getCurrentUser();
   const wallet = db.wallets.find((w) => w.userId === user?.id);
 

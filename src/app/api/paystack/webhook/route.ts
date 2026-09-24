@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Missing reference" }, { status: 400 });
   }
 
-  const db = readDb();
+  const db = await readDb();
   const txn = db.transactions.find(
     (t) => t.paystackReference === reference && t.status === "pending"
   );
@@ -68,7 +68,7 @@ export async function POST(req: NextRequest) {
   txn.amountNgn = verification.amountNgn;
   txn.note = `Confirmed via Paystack webhook (ref: ${reference})`;
 
-  writeDb(db);
+  await writeDb(db);
 
   return NextResponse.json({ received: true });
 }

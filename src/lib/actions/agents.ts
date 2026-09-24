@@ -27,7 +27,7 @@ export async function agentCashAction(_prev: FormState, formData: FormData): Pro
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const { agentId, direction, amount } = parsed.data;
-  const db = readDb();
+  const db = await readDb();
   const agent = db.agents.find((a) => a.id === agentId);
   if (!agent) return { error: "Agent not found" };
 
@@ -61,7 +61,7 @@ export async function agentCashAction(_prev: FormState, formData: FormData): Pro
     createdAt: new Date().toISOString(),
   });
 
-  writeDb(db);
+  await writeDb(db);
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/agents");
 

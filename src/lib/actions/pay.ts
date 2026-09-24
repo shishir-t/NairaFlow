@@ -31,7 +31,7 @@ export async function sendPayAction(_prev: FormState, formData: FormData): Promi
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const { recipientPhone, amount, note } = parsed.data;
-  const db = readDb();
+  const db = await readDb();
 
   const sender = db.users.find((u) => u.id === userId);
   if (!sender) return { error: "Sender not found" };
@@ -82,7 +82,7 @@ export async function sendPayAction(_prev: FormState, formData: FormData): Promi
     createdAt: now,
   });
 
-  writeDb(db);
+  await writeDb(db);
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/pay");
   // TODO(notifications): wire to email/SMS provider here — notify both the

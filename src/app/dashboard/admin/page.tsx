@@ -42,7 +42,7 @@ export default async function AdminPage() {
   const user = await getCurrentUser();
   if (!user) redirect("/login");
 
-  const db = readDb();
+  const db = await readDb();
 
   const totalWalletBalanceNgn = db.wallets.reduce((sum, w) => sum + w.balanceNgn, 0);
   const totalUsers = db.users.length;

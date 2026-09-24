@@ -35,7 +35,7 @@ export async function sendRemitAction(_prev: FormState, formData: FormData): Pro
   const corridorMeta = CORRIDORS.find((c) => c.code === (corridor as Corridor));
   if (!corridorMeta) return { error: "Unsupported corridor" };
 
-  const db = readDb();
+  const db = await readDb();
   const sender = db.users.find((u) => u.id === userId);
   if (!sender) return { error: "Sender not found" };
 
@@ -87,7 +87,7 @@ export async function sendRemitAction(_prev: FormState, formData: FormData): Pro
     createdAt: now,
   });
 
-  writeDb(db);
+  await writeDb(db);
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/remit");
 

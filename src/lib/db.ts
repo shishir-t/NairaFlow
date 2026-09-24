@@ -1,33 +1,71 @@
-import fs from "node:fs";
-import path from "node:path";
-import type { DB } from "./types";
-import { SEED_AGENTS } from "./agents-seed";
+import { desc } from "drizzle-orm";
+import { client } from "./drizzle-client";
+import { users, wallets, transactions, agents } from "./schema";
+import type { DB, User, Wallet, Transaction, Agent } from "./types";
 
-const DATA_DIR = path.join(process.cwd(), ".data");
-const DATA_FILE = path.join(DATA_DIR, "db.json");
+/**
+ * Reads the whole DB, assembled from four table queries against Postgres.
+ *
+ * This keeps the `readDb()`/`writeDb()` whole-DB shape the JSON-file store
+ * used (see git history), so every Server Action / Server Component only
+ * needed `await` added at call sites instead of being rewritten around
+ * granular queries.
+ */
+export async function readDb(): Promise<DB> {
+  const [userRows, walletRows, transactionRows, agentRows] = await Promise.all([
+    client.select().from(users),
+    client.select().from(wallets),
+    client.select().from(transactions).orderBy(desc(transactions.createdAt)),
+    client.select().from(agents),
+  ]);
 
-function emptyDb(): DB {
-  return { users: [], wallets: [], transactions: [], agents: SEED_AGENTS };
+  return {
+    users: userRows as User[],
+    wallets: walletRows as Wallet[],
+    transactions: transactionRows as Transaction[],
+    agents: agentRows as Agent[],
+  };
 }
 
-function ensureFile() {
-  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
-  if (!fs.existsSync(DATA_FILE)) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(emptyDb(), null, 2));
-  }
-}
-
-export function readDb(): DB {
-  ensureFile();
-  const raw = fs.readFileSync(DATA_FILE, "utf-8");
-  const db = JSON.parse(raw) as DB;
-  if (!db.agents || db.agents.length === 0) db.agents = SEED_AGENTS;
-  return db;
-}
-
-export function writeDb(db: DB) {
-  ensureFile();
-  fs.writeFileSync(DATA_FILE, JSON.stringify(db, null, 2));
+/**
+ * Persists the whole DB back to Postgres.
+ *
+ * Callers mutate the object `readDb()` returned (push new rows, or flip a
+ * field on an existing one) and pass the whole thing back in, exactly like
+ * the old JSON-file `writeDb()`. None of the current app logic ever removes
+ * a row, so this upserts every row of every table (insert, or update on
+ * primary-key conflict) rather than diffing against what's currently
+ * stored — functionally equivalent here, and much simpler. If a caller ever
+ * needs to delete rows, this will need a real diff (or a dedicated delete
+ * function) to match.
+ */
+export async function writeDb(db: DB): Promise<void> {
+  await client.transaction(async (tx) => {
+    for (const u of db.users) {
+      await tx
+        .insert(users)
+        .values(u)
+        .onConflictDoUpdate({ target: users.id, set: u });
+    }
+    for (const w of db.wallets) {
+      await tx
+        .insert(wallets)
+        .values(w)
+        .onConflictDoUpdate({ target: wallets.userId, set: { balanceNgn: w.balanceNgn } });
+    }
+    for (const t of db.transactions) {
+      await tx
+        .insert(transactions)
+        .values(t)
+        .onConflictDoUpdate({ target: transactions.id, set: t });
+    }
+    for (const a of db.agents) {
+      await tx
+        .insert(agents)
+        .values(a)
+        .onConflictDoUpdate({ target: agents.id, set: a });
+    }
+  });
 }
 
 export function genId(prefix: string) {
