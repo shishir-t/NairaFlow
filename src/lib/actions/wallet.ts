@@ -4,6 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { readDb, writeDb, genId } from "@/lib/db";
 import { getSessionUserId } from "@/lib/auth";
+import { isDuplicateTransaction } from "@/lib/replay-guard";
 import type { FormState } from "@/lib/actions/state";
 
 const fundSchema = z.object({
@@ -31,6 +32,10 @@ export async function fundWalletAction(_prev: FormState, formData: FormData): Pr
   const db = readDb();
   const wallet = db.wallets.find((w) => w.userId === userId);
   if (!wallet) return { error: "Wallet not found" };
+
+  if (isDuplicateTransaction(db, userId, "fund", amount)) {
+    return { error: "Duplicate request detected. Please wait a moment before trying again." };
+  }
 
   wallet.balanceNgn += amount;
   db.transactions.unshift({

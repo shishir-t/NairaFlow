@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { readDb, writeDb, genId } from "@/lib/db";
 import { createSession, destroySession } from "@/lib/auth";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 import type { FormState } from "@/lib/actions/state";
 
 const signupSchema = z.object({
@@ -32,6 +33,13 @@ export async function signupAction(_prev: FormState, formData: FormData): Promis
   }
 
   const { fullName, email, phone, nin, password } = parsed.data;
+
+  const ip = await getClientIp();
+  const rateLimit = checkRateLimit(`signup:${email.toLowerCase()}:${ip}`);
+  if (!rateLimit.allowed) {
+    return { error: "Too many signup attempts. Please try again in a minute." };
+  }
+
   const db = readDb();
 
   if (db.users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
@@ -76,6 +84,13 @@ export async function loginAction(_prev: FormState, formData: FormData): Promise
   }
 
   const { identifier, password } = parsed.data;
+
+  const ip = await getClientIp();
+  const rateLimit = checkRateLimit(`login:${identifier.toLowerCase()}:${ip}`);
+  if (!rateLimit.allowed) {
+    return { error: "Too many login attempts. Please try again in a minute." };
+  }
+
   const db = readDb();
   const user = db.users.find(
     (u) => u.email.toLowerCase() === identifier.toLowerCase() || u.phone === identifier
