@@ -7,7 +7,7 @@ import { FundWalletForm } from "@/components/dashboard/FundWalletForm";
 
 export default async function WalletPage() {
   const user = await getCurrentUser();
-  const db = readDb();
+  const db = await readDb();
   const wallet = db.wallets.find((w) => w.userId === user?.id);
   const transactions = db.transactions.filter((t) => t.userId === user?.id && t.type === "fund");
 

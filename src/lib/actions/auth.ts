@@ -40,7 +40,7 @@ export async function signupAction(_prev: FormState, formData: FormData): Promis
     return { error: "Too many signup attempts. Please try again in a minute." };
   }
 
-  const db = readDb();
+  const db = await readDb();
 
   if (db.users.some((u) => u.email.toLowerCase() === email.toLowerCase())) {
     return { error: "An account with this email already exists" };
@@ -63,7 +63,7 @@ export async function signupAction(_prev: FormState, formData: FormData): Promis
     createdAt: new Date().toISOString(),
   });
   db.wallets.push({ userId, balanceNgn: 0 });
-  writeDb(db);
+  await writeDb(db);
 
   await createSession(userId);
   redirect("/dashboard");
@@ -91,7 +91,7 @@ export async function loginAction(_prev: FormState, formData: FormData): Promise
     return { error: "Too many login attempts. Please try again in a minute." };
   }
 
-  const db = readDb();
+  const db = await readDb();
   const user = db.users.find(
     (u) => u.email.toLowerCase() === identifier.toLowerCase() || u.phone === identifier
   );

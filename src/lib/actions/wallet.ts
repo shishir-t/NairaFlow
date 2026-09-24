@@ -29,7 +29,7 @@ export async function fundWalletAction(_prev: FormState, formData: FormData): Pr
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Invalid input" };
 
   const { method, amount } = parsed.data;
-  const db = readDb();
+  const db = await readDb();
   const wallet = db.wallets.find((w) => w.userId === userId);
   if (!wallet) return { error: "Wallet not found" };
 
@@ -47,7 +47,7 @@ export async function fundWalletAction(_prev: FormState, formData: FormData): Pr
     status: "completed",
     createdAt: new Date().toISOString(),
   });
-  writeDb(db);
+  await writeDb(db);
   revalidatePath("/dashboard");
   revalidatePath("/dashboard/wallet");
   // TODO(notifications): wire to email/SMS provider here — send a funding

@@ -6,7 +6,7 @@ import { RemitForm } from "@/components/dashboard/RemitForm";
 
 export default async function RemitPage() {
   const user = await getCurrentUser();
-  const db = readDb();
+  const db = await readDb();
   const transactions = db.transactions
     .filter((t) => t.userId === user?.id && (t.type === "remit_send" || t.type === "remit_receive"))
     .slice(0, 20);

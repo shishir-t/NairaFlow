@@ -5,7 +5,7 @@ import { TransactionList } from "@/components/dashboard/TransactionList";
 
 export default async function TransactionsPage() {
   const user = await getCurrentUser();
-  const db = readDb();
+  const db = await readDb();
   const transactions = db.transactions.filter((t) => t.userId === user?.id);
 
   return (

@@ -7,7 +7,7 @@ import { TransactionList } from "@/components/dashboard/TransactionList";
 
 export default async function DashboardOverview() {
   const user = await getCurrentUser();
-  const db = readDb();
+  const db = await readDb();
   const wallet = db.wallets.find((w) => w.userId === user?.id);
   const transactions = db.transactions.filter((t) => t.userId === user?.id).slice(0, 6);
 

@@ -7,7 +7,7 @@ import { ReceiveQr } from "@/components/dashboard/ReceiveQr";
 
 export default async function PayPage() {
   const user = await getCurrentUser();
-  const db = readDb();
+  const db = await readDb();
   const transactions = db.transactions
     .filter((t) => t.userId === user?.id && (t.type === "p2p_send" || t.type === "p2p_receive"))
     .slice(0, 20);

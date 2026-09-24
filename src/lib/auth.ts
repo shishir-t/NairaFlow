@@ -45,6 +45,6 @@ export async function getSessionUserId(): Promise<string | null> {
 export async function getCurrentUser(): Promise<User | null> {
   const userId = await getSessionUserId();
   if (!userId) return null;
-  const db = readDb();
+  const db = await readDb();
   return db.users.find((u) => u.id === userId) ?? null;
 }
