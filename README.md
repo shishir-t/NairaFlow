@@ -34,3 +34,11 @@ Set `NF_SESSION_SECRET` in production to a long random string (defaults to a dev
 - `src/lib/fx.ts` — remittance corridors and live-quote simulation
 - `src/components/marketing` — landing page sections sourced from the investor deck
 - `src/components/dashboard` — wallet, pay, remit, and agent network UI
+
+## Before production
+
+This repo is a working demo, not a production-ready backend. Before wiring in real money movement, at minimum:
+
+- **Rotate `NF_SESSION_SECRET`.** It currently defaults to a dev-only string (`nairaflow-dev-secret-change-me`) in `src/lib/auth.ts` if the env var is unset. Set it to a long random secret in every real environment, and never rely on the default outside local dev.
+- **Move rate limiting to shared storage.** Signup/login rate limiting (`src/lib/rate-limit.ts`) is an in-memory sliding-window limiter keyed by client IP. It resets on every server restart and isn't shared across instances, so it only meaningfully protects a single-instance deployment. Move it to Redis/Upstash (or similar shared storage) before running more than one instance.
+- **Replace `.data/db.json`.** `src/lib/db.ts` is a JSON-file store meant for local development only. It has no transactions, locking, or concurrency control, so concurrent writes (including from multiple server instances) can race and corrupt data or lose money-moving updates. Replace it with a real database before handling real funds.

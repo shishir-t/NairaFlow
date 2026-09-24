@@ -4,6 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { readDb, writeDb, genId } from "@/lib/db";
 import { getSessionUserId } from "@/lib/auth";
+import { isDuplicateTransaction } from "@/lib/replay-guard";
 import type { FormState } from "@/lib/actions/state";
 
 const FLAT_FEE_NGN = 50;
@@ -48,6 +49,10 @@ export async function sendPayAction(_prev: FormState, formData: FormData): Promi
   const recipientWallet = db.wallets.find((w) => w.userId === recipient.id);
   if (!senderWallet || !recipientWallet) return { error: "Wallet not found" };
   if (senderWallet.balanceNgn < totalDebit) return { error: "Insufficient balance" };
+
+  if (isDuplicateTransaction(db, userId, "p2p_send", amount)) {
+    return { error: "Duplicate request detected. Please wait a moment before trying again." };
+  }
 
   senderWallet.balanceNgn -= totalDebit;
   recipientWallet.balanceNgn += amount;

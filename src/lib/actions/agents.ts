@@ -4,6 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { readDb, writeDb, genId } from "@/lib/db";
 import { getSessionUserId } from "@/lib/auth";
+import { isDuplicateTransaction } from "@/lib/replay-guard";
 import type { FormState } from "@/lib/actions/state";
 
 const AGENT_COMMISSION_PCT = 0.5;
@@ -34,6 +35,11 @@ export async function agentCashAction(_prev: FormState, formData: FormData): Pro
   if (!wallet) return { error: "Wallet not found" };
 
   const commission = Math.round(amount * (AGENT_COMMISSION_PCT / 100));
+  const txnType = direction === "cash_out" ? "agent_cash_out" : "agent_cash_in";
+
+  if (isDuplicateTransaction(db, userId, txnType, amount)) {
+    return { error: "Duplicate request detected. Please wait a moment before trying again." };
+  }
 
   if (direction === "cash_out") {
     const totalDebit = amount + commission;
@@ -46,7 +52,7 @@ export async function agentCashAction(_prev: FormState, formData: FormData): Pro
   db.transactions.unshift({
     id: genId("txn"),
     userId,
-    type: direction === "cash_out" ? "agent_cash_out" : "agent_cash_in",
+    type: txnType,
     amountNgn: amount,
     feeNgn: commission,
     counterpartyName: agent.name,

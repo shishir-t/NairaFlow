@@ -4,6 +4,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { readDb, writeDb, genId } from "@/lib/db";
 import { getSessionUserId } from "@/lib/auth";
+import { isDuplicateTransaction } from "@/lib/replay-guard";
 import type { FormState } from "@/lib/actions/state";
 import { CORRIDORS, NAIRAFLOW_FX_FEE_PCT, type Corridor } from "@/lib/fx";
 
@@ -41,6 +42,10 @@ export async function sendRemitAction(_prev: FormState, formData: FormData): Pro
   const grossNgn = sourceAmount * lockedRate;
   const feeNgn = Math.round(grossNgn * (NAIRAFLOW_FX_FEE_PCT / 100));
   const netNgn = Math.round(grossNgn - feeNgn);
+
+  if (isDuplicateTransaction(db, userId, "remit_send", netNgn)) {
+    return { error: "Duplicate request detected. Please wait a moment before trying again." };
+  }
 
   const recipient = db.users.find((u) => u.phone === recipientPhone);
   const now = new Date().toISOString();
