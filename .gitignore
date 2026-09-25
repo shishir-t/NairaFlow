@@ -42,3 +42,6 @@ next-env.d.ts
 
 # claude code agent worktrees
 /.claude/
+
+# neon CLI skills lockfile (local dev tooling, not app code)
+/skills-lock.json
