@@ -81,7 +81,8 @@ instance to run it — this sandbox does not run one for you.
    ```bash
    npm run db:push
    ```
-   Or, to manage versioned migrations instead: `npm run db:generate` then `npm run db:migrate`.
+   Or apply the committed versioned migrations in `drizzle/` instead: `npm run db:migrate`. After
+   changing `src/lib/schema.ts`, run `npm run db:generate` to add a new migration and commit it.
 4. Seed the 12 fixed agents (`src/lib/agents-seed.ts`) into the `agents` table:
    ```bash
    npm run db:seed
