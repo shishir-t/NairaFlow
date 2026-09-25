@@ -31,6 +31,16 @@ const products = [
       "USDC on the backend; Naira in the recipient's wallet",
     ],
   },
+  {
+    name: "NairaCard",
+    tag: "Spend anywhere online",
+    href: "/dashboard/card",
+    bullets: [
+      "Virtual USD card funded from your NairaWallet",
+      "Shop on Amazon, eBay, and anywhere Visa/Mastercard is accepted online",
+      "Freeze and unfreeze instantly from the app",
+    ],
+  },
 ];
 
 export function Solution() {
@@ -39,9 +49,9 @@ export function Solution() {
       <div className="mx-auto max-w-6xl px-6 py-20">
         <SectionHeading
           eyebrow="Our Solution"
-          title="One app. Three core products. Every Nigerian, every device."
+          title="One app. Four core products. Every Nigerian, every device."
         />
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
           {products.map((p) => (
             <div
               key={p.name}

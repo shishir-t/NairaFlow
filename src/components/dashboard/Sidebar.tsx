@@ -12,6 +12,7 @@ const links = [
   { href: "/dashboard/wallet", label: "NairaWallet", icon: "₦" },
   { href: "/dashboard/pay", label: "NairaPay", icon: "→" },
   { href: "/dashboard/remit", label: "NairaRemit", icon: "✈" },
+  { href: "/dashboard/card", label: "NairaCard", icon: "💳" },
   { href: "/dashboard/agents", label: "Agent Network", icon: "◎" },
   { href: "/dashboard/transactions", label: "Transactions", icon: "≡" },
   { href: "/dashboard/admin", label: "Admin / Ops", icon: "⚙" },

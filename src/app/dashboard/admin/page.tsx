@@ -13,6 +13,8 @@ const TYPE_LABELS: Record<TransactionType, string> = {
   remit_receive: "NairaRemit (receive)",
   agent_cash_in: "Agent cash-in",
   agent_cash_out: "Agent cash-out",
+  card_fund: "NairaCard funding",
+  card_spend: "NairaCard spend (simulated)",
 };
 
 const TYPE_ORDER: TransactionType[] = [
@@ -23,6 +25,8 @@ const TYPE_ORDER: TransactionType[] = [
   "remit_receive",
   "agent_cash_in",
   "agent_cash_out",
+  "card_fund",
+  "card_spend",
 ];
 
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {

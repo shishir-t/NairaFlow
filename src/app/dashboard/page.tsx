@@ -15,6 +15,7 @@ export default async function DashboardOverview() {
     { href: "/dashboard/wallet", label: "Fund wallet", icon: "₦" },
     { href: "/dashboard/pay", label: "Send NairaPay", icon: "→" },
     { href: "/dashboard/remit", label: "International remit", icon: "✈" },
+    { href: "/dashboard/card", label: "NairaCard", icon: "💳" },
     { href: "/dashboard/agents", label: "Find an agent", icon: "◎" },
   ];
 
@@ -30,7 +31,7 @@ export default async function DashboardOverview() {
         </p>
       </div>
 
-      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
+      <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {quickActions.map((a) => (
           <Link
             key={a.href}

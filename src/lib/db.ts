@@ -1,7 +1,7 @@
 import { desc } from "drizzle-orm";
 import { client } from "./drizzle-client";
-import { users, wallets, transactions, agents } from "./schema";
-import type { DB, User, Wallet, Transaction, Agent } from "./types";
+import { users, wallets, transactions, agents, cards } from "./schema";
+import type { DB, User, Wallet, Transaction, Agent, Card } from "./types";
 
 /**
  * Reads the whole DB, assembled from four table queries against Postgres.
@@ -12,11 +12,12 @@ import type { DB, User, Wallet, Transaction, Agent } from "./types";
  * granular queries.
  */
 export async function readDb(): Promise<DB> {
-  const [userRows, walletRows, transactionRows, agentRows] = await Promise.all([
+  const [userRows, walletRows, transactionRows, agentRows, cardRows] = await Promise.all([
     client.select().from(users),
     client.select().from(wallets),
     client.select().from(transactions).orderBy(desc(transactions.createdAt)),
     client.select().from(agents),
+    client.select().from(cards),
   ]);
 
   return {
@@ -24,6 +25,7 @@ export async function readDb(): Promise<DB> {
     wallets: walletRows as Wallet[],
     transactions: transactionRows as Transaction[],
     agents: agentRows as Agent[],
+    cards: cardRows as Card[],
   };
 }
 
@@ -64,6 +66,12 @@ export async function writeDb(db: DB): Promise<void> {
         .insert(agents)
         .values(a)
         .onConflictDoUpdate({ target: agents.id, set: a });
+    }
+    for (const c of db.cards) {
+      await tx
+        .insert(cards)
+        .values(c)
+        .onConflictDoUpdate({ target: cards.id, set: c });
     }
   });
 }

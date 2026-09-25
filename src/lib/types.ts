@@ -21,7 +21,9 @@ export type TransactionType =
   | "remit_send"
   | "remit_receive"
   | "agent_cash_in"
-  | "agent_cash_out";
+  | "agent_cash_out"
+  | "card_fund"
+  | "card_spend";
 
 export type TransactionStatus = "completed" | "pending" | "locked";
 
@@ -43,6 +45,9 @@ export type Transaction = {
   /** Paystack transaction reference, set for bank-transfer funding attempts
    * initiated via Paystack so the webhook can look the pending record up. */
   paystackReference?: string;
+  /** Merchant name for a simulated card_spend (e.g. "Amazon", "eBay", or a
+   * free-text "Other" merchant). */
+  merchant?: string;
 };
 
 export type Agent = {
@@ -55,9 +60,22 @@ export type Agent = {
   commissionPct: number;
 };
 
+export type Card = {
+  id: string;
+  userId: string;
+  last4: string;
+  cardholderName: string;
+  expiryMonth: number;
+  expiryYear: number;
+  balanceUsd: number;
+  status: "active" | "frozen";
+  createdAt: string;
+};
+
 export type DB = {
   users: User[];
   wallets: Wallet[];
   transactions: Transaction[];
   agents: Agent[];
+  cards: Card[];
 };

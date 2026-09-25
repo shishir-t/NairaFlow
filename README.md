@@ -5,6 +5,7 @@ Mobile-first banking for Nigeria's informal economy, built from the NairaFlow in
 - **NairaWallet** — mobile-first wallet with NIN-based KYC. Fund via bank transfer, USSD, or a cash agent.
 - **NairaPay** — P2P payments by phone number, with QR codes for receiving payments from market traders.
 - **NairaRemit** — international remittances from the UK, US, EU, and Canada, with an FX rate locked at send time.
+- **NairaCard** — a simulated virtual USD card funded from the NGN wallet, for spending on international sites like Amazon and eBay.
 
 Also included: an **agent network** (cash-in/cash-out across Lagos & Abuja) and a full **transaction history**.
 
@@ -123,13 +124,13 @@ your Vercel account, which this session doesn't have.
 ## Project structure
 
 - `src/app` — routes: marketing landing page, `/signup`, `/login`, and the `/dashboard/*` app
-- `src/lib/actions` — Server Actions for auth, wallet funding, P2P payments, remittances, and agent cash in/out
+- `src/lib/actions` — Server Actions for auth, wallet funding, P2P payments, remittances, agent cash in/out, and NairaCard (`card.ts`)
 - `src/lib/schema.ts` — Drizzle ORM table definitions (mirrors `src/lib/types.ts`)
 - `src/lib/db.ts` — Postgres-backed `readDb()`/`writeDb()` data-access layer (via Drizzle)
 - `scripts/seed.ts` — seeds the agent network (`npm run db:seed`)
-- `src/lib/fx.ts` — remittance corridors and live-quote simulation
+- `src/lib/fx.ts` — remittance/card-funding corridors and live-quote simulation
 - `src/components/marketing` — landing page sections sourced from the investor deck
-- `src/components/dashboard` — wallet, pay, remit, and agent network UI
+- `src/components/dashboard` — wallet, pay, remit, NairaCard, and agent network UI
 
 ## Before production
 

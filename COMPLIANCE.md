@@ -59,6 +59,36 @@ unnamed role.
       (draft transaction monitoring / SAR escalation path in `docs/transaction-monitoring.md`, not
       yet reviewed by US counsel or operational).
 
+## Card Issuing (NairaCard)
+
+NairaCard is a virtual USD card funded from the NGN wallet, simulated end-to-end in this repo
+(`src/lib/actions/card.ts`) — no real card numbers, PANs, or network (Visa/Mastercard) integration
+exist anywhere in the codebase.
+
+- [ ] **Licensed card-issuing partner required.** Issuing a real virtual Visa/Mastercard is not
+      something this app can do with code alone — it requires a licensed card-issuing partner or
+      program manager, e.g. **Union54**, **Bridgecard**, or **Marqeta** (or an equivalent issuing
+      bank/BIN sponsor). None of those integrations exist here; `card_fund`/`card_spend` are
+      simulated ledger entries only.
+- [ ] **CBN foreign exchange rules on Naira-to-USD card funding.** This is not a minor checkbox —
+      it is a core viability question for this exact feature. CBN's forex policy specifically
+      restricts/regulates converting Naira to USD for card funding, and this has been a real
+      regulatory flashpoint for Nigerian fintechs: several had their dollar (virtual USD) card
+      programs suspended or restricted by CBN in 2023–2024 over forex policy. Before any real-money
+      version of NairaCard ships, confirm the current CBN stance on Naira-funded USD virtual cards
+      with counsel, and design the funding flow (limits, funding source restrictions, reporting)
+      around it rather than assuming NGN→USD card funding is a routine FX conversion.
+- [ ] **PCI DSS.** This demo never generates real card numbers/PANs, which sidesteps PCI DSS scope
+      for now — say that explicitly, don't leave it implicit. The moment a real issuing partner
+      produces live card numbers (even tokenized ones surfaced to the app), PCI DSS applies and
+      needs its own assessment (scope, SAQ level, and whether card data ever touches NairaFlow's
+      own systems or stays fully within the issuing partner's vault).
+- [ ] Card funding (`card_fund`) and simulated spend (`card_spend`) transactions should be covered
+      by the same KYC and transaction-monitoring program as every other product — see
+      `docs/kyc-onboarding.md` and `docs/transaction-monitoring.md`. A row for card activity still
+      needs to be added to the monitoring trigger table in `docs/transaction-monitoring.md`
+      (tracked there, not duplicated here).
+
 ## Cross-cutting
 
 - [ ] Data protection: Nigeria's NDPR (and UK/EU GDPR if handling UK/EU sender data) both apply —

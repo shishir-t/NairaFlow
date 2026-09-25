@@ -10,6 +10,8 @@ const TYPE_LABELS: Record<Transaction["type"], string> = {
   remit_receive: "Remittance received",
   agent_cash_in: "Agent cash-in",
   agent_cash_out: "Agent cash-out",
+  card_fund: "NairaCard funded",
+  card_spend: "NairaCard purchase (simulated)",
 };
 
 const CREDIT_TYPES: Transaction["type"][] = ["fund", "p2p_receive", "remit_receive", "agent_cash_in"];
@@ -34,19 +36,22 @@ export function TransactionList({ transactions, emptyText }: { transactions: Tra
                 <p className="truncate text-sm font-medium text-white">
                   {TYPE_LABELS[t.type]}
                   {t.counterpartyName ? ` ${t.counterpartyName}` : ""}
+                  {t.merchant ? ` at ${t.merchant}` : ""}
                 </p>
                 <p className="mt-0.5 truncate text-xs text-neutral-500">
                   {t.method ? `${t.method} · ` : ""}
                   {formatDate(t.createdAt)}
-                  {t.sourceAmount && t.sourceCurrency
-                    ? ` · ${formatForeign(t.sourceAmount, t.sourceCurrency)} @ ${t.fxRate?.toFixed(2)}`
+                  {t.sourceAmount && t.sourceCurrency && t.fxRate
+                    ? ` · ${formatForeign(t.sourceAmount, t.sourceCurrency)} @ ${t.fxRate.toFixed(2)}`
                     : ""}
                 </p>
               </div>
               <div className="shrink-0 text-right">
                 <p className={clsx("text-sm font-semibold", credit ? "text-nf-green" : "text-white")}>
                   {credit ? "+" : "-"}
-                  {formatNgn(t.amountNgn)}
+                  {t.type === "card_spend" && t.sourceAmount && t.sourceCurrency
+                    ? formatForeign(t.sourceAmount, t.sourceCurrency)
+                    : formatNgn(t.amountNgn)}
                 </p>
                 <p
                   className={clsx(

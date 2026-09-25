@@ -24,6 +24,7 @@ fixed rules the product must ship with unchanged.
 | **Agent anomalies** | An agent's cash-in/cash-out volume or commission diverges sharply from their historical pattern, or clusters around a single counterparty | Agent Network |
 | **Sanctioned/PEP counterparty** | Either side of a NairaRemit corridor transaction matches a sanctions/PEP screening hit | NairaRemit |
 | **Geographic mismatch** | Remittance sender/recipient pairing doesn't match the customer's registered corridor or KYC-collected location without explanation | NairaRemit |
+| **Rapid card fund + spend at unfamiliar merchant** | A `card_fund` immediately followed by a `card_spend` at a merchant outside the account's typical pattern (structuring/laundering pattern — NGN converted to USD then moved out again with minimal delay) | NairaCard |
 
 ## What's needed in the app vs. what exists today
 

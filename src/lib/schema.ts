@@ -38,6 +38,7 @@ export const transactions = pgTable("transactions", {
   feeNgn: integer("fee_ngn"),
   status: text("status").notNull(),
   createdAt: text("created_at").notNull(),
+  merchant: text("merchant"),
 });
 
 export const agents = pgTable("agents", {
@@ -48,4 +49,18 @@ export const agents = pgTable("agents", {
   type: text("type").notNull(),
   rating: real("rating").notNull(),
   commissionPct: real("commission_pct").notNull(),
+});
+
+export const cards = pgTable("cards", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  last4: text("last4").notNull(),
+  cardholderName: text("cardholder_name").notNull(),
+  expiryMonth: integer("expiry_month").notNull(),
+  expiryYear: integer("expiry_year").notNull(),
+  balanceUsd: real("balance_usd").notNull(),
+  status: text("status").notNull(),
+  createdAt: text("created_at").notNull(),
 });
