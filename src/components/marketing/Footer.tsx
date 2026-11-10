@@ -6,7 +6,9 @@ export function MarketingFooter() {
       <Logo className="justify-center" />
       <p className="mt-3 text-neutral-400">Banking 40 million people the system forgot.</p>
       <p className="mt-4 text-sm text-neutral-500">
-        hello@nairaflow.io &nbsp;•&nbsp; nairaflow.io
+        <a href="mailto:shishirtumukuntala@gmail.com" className="hover:text-white">
+          shishirtumukuntala@gmail.com
+        </a>
       </p>
       <p className="mx-auto mt-6 max-w-md text-xs text-neutral-600">
         Financials and projections available in data room upon request. This deck is confidential.

@@ -7,6 +7,7 @@ import { MarketSize } from "@/components/marketing/MarketSize";
 import { BusinessModel } from "@/components/marketing/BusinessModel";
 import { Traction } from "@/components/marketing/Traction";
 import { Competitive } from "@/components/marketing/Competitive";
+import { Founder } from "@/components/marketing/Founder";
 import { Connectivity } from "@/components/marketing/Connectivity";
 import { Ask } from "@/components/marketing/Ask";
 import { MarketingFooter } from "@/components/marketing/Footer";
@@ -24,6 +25,7 @@ export default function Home() {
         <BusinessModel />
         <Traction />
         <Competitive />
+        <Founder />
         <Connectivity />
         <Ask />
       </main>
